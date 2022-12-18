@@ -17,7 +17,8 @@ class ProductsScreen extends StatelessWidget {
       builder: (context, state) {
         return ConditionalBuilder(
           //condition: ShopCubit.get(context).homeModel != null,
-          condition: state is! ShopLoadingHomeDataState,
+          condition: state is! ShopLoadingHomeDataState &&
+              ShopCubit.get(context).homeModel != null,
           builder: (context) =>
               productsBuilder(ShopCubit.get(context).homeModel!),
           fallback: (context) =>
@@ -63,7 +64,8 @@ class ProductsScreen extends StatelessWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: 1.0,
                 crossAxisSpacing: 1.0,
-                childAspectRatio: 1 / 1.72,
+                //childAspectRatio: 1 / 1.2,
+                childAspectRatio: 1 / 1.7,
                 children: List.generate(
                   model.data!.products!.length,
                   (index) => buildGridProduct(model.data!.products![index]),
@@ -104,8 +106,8 @@ class ProductsScreen extends StatelessWidget {
                   ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
+            Container(
+              margin: const EdgeInsets.only(top: 15.0, left: 10.0, right: 5.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -119,33 +121,39 @@ class ProductsScreen extends StatelessWidget {
                     ),
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '${model.price.round()!}',
-                        style: const TextStyle(
-                          fontSize: 12.0,
-                          color: defaultColor,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5.0,
-                      ),
-                      if (model.discount != 0)
-                        Text(
-                          '${model.oldPrice.round()!}',
-                          style: const TextStyle(
-                            fontSize: 10.0,
-                            color: Colors.grey,
-                            decoration: TextDecoration.lineThrough,
+                      Row(
+                        children: [
+                          Text(
+                            '${model.price.round()!} EGP',
+                            style: const TextStyle(
+                              fontSize: 12.0,
+                              color: defaultColor,
+                            ),
                           ),
-                        ),
-                      const Spacer(),
+                          const SizedBox(
+                            width: 5.0,
+                          ),
+                          if (model.discount != 0)
+                            Text(
+                              '${model.oldPrice.round()!} EGP',
+                              style: const TextStyle(
+                                fontSize: 10.0,
+                                color: Colors.grey,
+                                decoration: TextDecoration.lineThrough,
+                              ),
+                            ),
+                        ],
+                      ),
+
+                      //const Spacer(),
                       IconButton(
                           padding: EdgeInsets.zero,
                           onPressed: () {},
                           icon: const Icon(
                             Icons.favorite_border,
-                            size: 12.0,
+                            size: 18.0,
                           )),
                     ],
                   ),
