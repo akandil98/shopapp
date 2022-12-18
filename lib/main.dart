@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/layout/cubit/cubit.dart';
 import 'package:shop_app/layout/shop_layout.dart';
 import 'package:shop_app/modules/login/login_screen.dart';
 import 'package:shop_app/modules/on_boarding/on_boarding_screen.dart';
@@ -69,7 +70,7 @@ class MyApp extends StatelessWidget {
               fromShared: isDark,
             ),
         ),
-        // BlocProvider(create: (BuildContext context) => ShopCubit()),
+        BlocProvider(create: (BuildContext context) => ShopCubit()),
       ],
       child: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
