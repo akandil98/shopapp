@@ -1,10 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:shop_app/modules/on_boarding/on_boarding_screen.dart';
 import 'package:shop_app/shared/bloc_observer.dart';
+import 'package:shop_app/shared/network/local/cache_helper.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
+  await CacheHelper.init();
   runApp(
     MaterialApp(
       title: 'Flutter Demo',
@@ -12,20 +15,7 @@ void main() {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const OnBoardingScreen(),
     ),
   );
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
-      ),
-    );
-  }
 }
