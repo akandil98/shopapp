@@ -163,7 +163,7 @@ class LoginScreen extends StatelessWidget {
                               function: () {
                                 navigateTo(
                                   context,
-                                  const RegisterScreen(),
+                                  RegisterScreen(),
                                 );
                               },
                               text: 'register',
