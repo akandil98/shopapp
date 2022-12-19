@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/layout/cubit/states.dart';
 import 'package:shop_app/models/categories_model.dart';
+import 'package:shop_app/models/change_favorites_model.dart';
+import 'package:shop_app/models/favorites_model.dart';
 import 'package:shop_app/models/home_model.dart';
 import 'package:shop_app/modules/categories/categories_screen.dart';
 import 'package:shop_app/modules/favorites/favorites_screen.dart';
@@ -20,10 +24,10 @@ class ShopCubit extends Cubit<ShopStates> {
   int currentIndex = 0;
 
   List<Widget> bottomScreens = [
-    ProductsScreen(),
-    CategoriesScreen(),
-    FavoritesScreen(),
-    SettingsScreen(),
+    const ProductsScreen(),
+    const CategoriesScreen(),
+    const FavoritesScreen(),
+    const SettingsScreen(),
   ];
 
   void changeBottom(int index) {
@@ -33,14 +37,22 @@ class ShopCubit extends Cubit<ShopStates> {
 
   HomeModel? homeModel;
 
+  Map<int?, bool?> favorites = {};
+
   void getHomeData() {
     emit(ShopLoadingHomeDataState());
 
     DioHelper.getData(
-      url: home,
+      url: homeReq,
       token: token,
     ).then((value) {
       homeModel = HomeModel.fromJson(value.data);
+      homeModel!.data!.products!.forEach((element) {
+        favorites.addAll({
+          element.id: element.inFavorites,
+        });
+      });
+      print(favorites.toString());
       emit(ShopSuccessHomeDataState());
     }).catchError((error) {
       if (kDebugMode) {
@@ -56,7 +68,7 @@ class ShopCubit extends Cubit<ShopStates> {
     //emit(ShopLoadingHomeDataState());
 
     DioHelper.getData(
-      url: categories,
+      url: categoriesReq,
       token: token,
     ).then((value) {
       categoriesModel = CategoriesModel.fromJson(value.data);
@@ -66,6 +78,50 @@ class ShopCubit extends Cubit<ShopStates> {
         print(error.toString());
       }
       emit(ShopErrorCategoriesState());
+    });
+  }
+
+  ChangeFavoritesModel? changeFavoritesModel;
+
+  void changeFavorites(int productId) {
+    favorites[productId] = !favorites[productId]!;
+    emit(ShopChangeFavoritesState());
+    DioHelper.postData(
+      url: favoritesReq,
+      data: {
+        'product_id': productId,
+      },
+      token: token,
+    ).then((value) {
+      changeFavoritesModel = ChangeFavoritesModel.fromJson(value.data);
+      if (!changeFavoritesModel!.status!) {
+        favorites[productId] = !favorites[productId]!;
+      } else {
+        getFavorites();
+      }
+      emit(ShopSuccessChangeFavoritesState(changeFavoritesModel!));
+    }).catchError((error) {
+      favorites[productId] = !favorites[productId]!;
+      emit(ShopErrorChangeFavoritesState());
+    });
+  }
+
+  FavoritesModel? favoritesModel;
+
+  void getFavorites() {
+    emit(ShopLoadingGetFavoritesState());
+
+    DioHelper.getData(
+      url: favoritesReq,
+      token: token,
+    ).then((value) {
+      favoritesModel = FavoritesModel.fromJson(value.data);
+      emit(ShopSuccessGetFavoritesState());
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      emit(ShopErrorGetFavoritesState());
     });
   }
 }

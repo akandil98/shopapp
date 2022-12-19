@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/layout/cubit/cubit.dart';
 import 'package:shop_app/layout/cubit/states.dart';
 import 'package:shop_app/models/categories_model.dart';
 import 'package:shop_app/models/home_model.dart';
+import 'package:shop_app/shared/components/componants.dart';
 import 'package:shop_app/shared/styles/colors.dart';
 
 class ProductsScreen extends StatelessWidget {
@@ -14,7 +16,13 @@ class ProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit, ShopStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is ShopSuccessChangeFavoritesState) {
+          if (!state.model.status!) {
+            showToast(text: state.model.message!, state: ToastStates.error);
+          }
+        }
+      },
       builder: (context, state) {
         return ConditionalBuilder(
           //condition: ShopCubit.get(context).homeModel != null,
@@ -23,7 +31,8 @@ class ProductsScreen extends StatelessWidget {
               ShopCubit.get(context).categoriesModel != null,
           builder: (context) => productsBuilder(
               ShopCubit.get(context).homeModel!,
-              ShopCubit.get(context).categoriesModel!),
+              ShopCubit.get(context).categoriesModel!,
+              context),
           fallback: (context) =>
               const Center(child: CircularProgressIndicator()),
         );
@@ -31,7 +40,8 @@ class ProductsScreen extends StatelessWidget {
     );
   }
 
-  Widget productsBuilder(HomeModel model, CategoriesModel categoriesModel) =>
+  Widget productsBuilder(
+          HomeModel model, CategoriesModel categoriesModel, context) =>
       SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -117,7 +127,8 @@ class ProductsScreen extends StatelessWidget {
                 childAspectRatio: 1 / 1.7,
                 children: List.generate(
                   model.data!.products!.length,
-                  (index) => buildGridProduct(model.data!.products![index]),
+                  (index) =>
+                      buildGridProduct(model.data!.products![index], context),
                 ),
               ),
             ),
@@ -147,7 +158,7 @@ class ProductsScreen extends StatelessWidget {
         ],
       );
 
-  Widget buildGridProduct(ProductModel model) => Container(
+  Widget buildGridProduct(ProductModel model, context) => Container(
         color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,12 +231,25 @@ class ProductsScreen extends StatelessWidget {
 
                       //const Spacer(),
                       IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {},
-                          icon: const Icon(
+                        onPressed: () {
+                          ShopCubit.get(context).changeFavorites(model.id!);
+                          if (kDebugMode) {
+                            print(model.id);
+                          }
+                        },
+                        icon: CircleAvatar(
+                          radius: 15.0,
+                          backgroundColor:
+                              (ShopCubit.get(context).favorites[model.id]!)
+                                  ? defaultColor
+                                  : Colors.grey,
+                          child: const Icon(
                             Icons.favorite_border,
                             size: 18.0,
-                          )),
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ],

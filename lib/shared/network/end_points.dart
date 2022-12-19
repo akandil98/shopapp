@@ -1,11 +1,13 @@
-const login = 'login';
+const loginReq = 'login';
 
-const home = 'home';
+const registerReq = 'register';
 
-const categories = 'categories';
+const homeReq = 'home';
 
-const register = 'register';
+const categoriesReq = 'categories';
 
-const profile = 'profile';
+const favoritesReq = 'favorites';
 
-const updateProfile = 'update-profile';
+const profileReq = 'profile';
+
+const updateProfileReq = 'update-profile';

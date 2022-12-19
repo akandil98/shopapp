@@ -19,7 +19,7 @@ class LoginCubit extends Cubit<LoginStates> {
   }) {
     emit(LoginLoadingState());
     DioHelper.postData(
-      url: login,
+      url: loginReq,
       data: {
         'email': email,
         'password': password,
