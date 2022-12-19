@@ -11,3 +11,5 @@ const favoritesReq = 'favorites';
 const profileReq = 'profile';
 
 const updateProfileReq = 'update-profile';
+
+const searchReq = 'products/search';

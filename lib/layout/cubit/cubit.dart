@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +36,7 @@ class ShopCubit extends Cubit<ShopStates> {
 
   HomeModel? homeModel;
 
-  Map<int?, bool?> favorites = {};
+  Map<int, bool>? favorites = {};
 
   void getHomeData() {
     emit(ShopLoadingHomeDataState());
@@ -48,12 +46,14 @@ class ShopCubit extends Cubit<ShopStates> {
       token: token,
     ).then((value) {
       homeModel = HomeModel.fromJson(value.data);
-      homeModel!.data!.products!.forEach((element) {
-        favorites.addAll({
-          element.id: element.inFavorites,
+      for (var element in homeModel!.data!.products!) {
+        favorites?.addAll({
+          element.id!: element.inFavorites!,
         });
-      });
-      print(favorites.toString());
+      }
+      if (kDebugMode) {
+        print(favorites.toString());
+      }
       emit(ShopSuccessHomeDataState());
     }).catchError((error) {
       if (kDebugMode) {
@@ -85,7 +85,7 @@ class ShopCubit extends Cubit<ShopStates> {
   ChangeFavoritesModel? changeFavoritesModel;
 
   void changeFavorites(int productId) {
-    favorites[productId] = !favorites[productId]!;
+    favorites![productId] = !favorites![productId]!;
     emit(ShopChangeFavoritesState());
     DioHelper.postData(
       url: favoritesReq,
@@ -96,13 +96,13 @@ class ShopCubit extends Cubit<ShopStates> {
     ).then((value) {
       changeFavoritesModel = ChangeFavoritesModel.fromJson(value.data);
       if (!changeFavoritesModel!.status!) {
-        favorites[productId] = !favorites[productId]!;
+        favorites![productId] = !favorites![productId]!;
       } else {
         getFavorites();
       }
       emit(ShopSuccessChangeFavoritesState(changeFavoritesModel!));
     }).catchError((error) {
-      favorites[productId] = !favorites[productId]!;
+      favorites![productId] = !favorites![productId]!;
       emit(ShopErrorChangeFavoritesState());
     });
   }

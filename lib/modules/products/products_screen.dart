@@ -240,7 +240,7 @@ class ProductsScreen extends StatelessWidget {
                         icon: CircleAvatar(
                           radius: 15.0,
                           backgroundColor:
-                              (ShopCubit.get(context).favorites[model.id]!)
+                              (ShopCubit.get(context).favorites![model.id]!)
                                   ? defaultColor
                                   : Colors.grey,
                           child: const Icon(

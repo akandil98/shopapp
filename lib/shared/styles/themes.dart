@@ -4,15 +4,15 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:shop_app/shared/styles/colors.dart';
 
 ThemeData darkTheme = ThemeData(
-  primarySwatch: defaultColor,
-  scaffoldBackgroundColor: HexColor('333739'),
+  primarySwatch: Colors.grey,
+  scaffoldBackgroundColor: Colors.white70,
   appBarTheme: AppBarTheme(
     titleSpacing: 20.0,
     systemOverlayStyle: SystemUiOverlayStyle(
       statusBarColor: HexColor('333739'),
       statusBarIconBrightness: Brightness.light,
     ),
-    backgroundColor: HexColor('333739'),
+    backgroundColor: Colors.grey,
     elevation: 0.0,
     titleTextStyle: const TextStyle(
       color: Colors.white,
@@ -25,10 +25,10 @@ ThemeData darkTheme = ThemeData(
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     type: BottomNavigationBarType.fixed,
-    selectedItemColor: defaultColor,
-    unselectedItemColor: Colors.grey,
+    selectedItemColor: HexColor('333739'),
+    unselectedItemColor: Colors.white,
     elevation: 20.0,
-    backgroundColor: HexColor('333739'),
+    backgroundColor: Colors.grey,
   ),
   textTheme: const TextTheme(
     bodyText1: TextStyle(
@@ -36,8 +36,12 @@ ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.w600,
       color: Colors.white,
     ),
+    headline4: TextStyle(
+      fontSize: 24.0,
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+    ),
   ),
-  //fontFamily: 'Jannah',
 );
 
 ThemeData lightTheme = ThemeData(
@@ -74,5 +78,4 @@ ThemeData lightTheme = ThemeData(
       color: Colors.black,
     ),
   ),
-  //fontFamily: 'Jannah',
 );

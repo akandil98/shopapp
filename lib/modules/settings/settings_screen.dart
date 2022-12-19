@@ -9,10 +9,10 @@ import 'package:shop_app/shared/components/constants.dart';
 
 class SettingsScreen extends StatelessWidget {
   SettingsScreen({super.key});
-  var formKey = GlobalKey<FormState>();
-  var nameController = TextEditingController();
-  var emailController = TextEditingController();
-  var phoneController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

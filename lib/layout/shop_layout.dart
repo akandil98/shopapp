@@ -5,6 +5,7 @@ import 'package:shop_app/layout/cubit/states.dart';
 import 'package:shop_app/modules/search/search_screen.dart';
 import 'package:shop_app/shared/components/componants.dart';
 import 'package:shop_app/shared/components/constants.dart';
+import 'package:shop_app/shared/cubit/cubit.dart';
 
 class ShopLayout extends StatelessWidget {
   const ShopLayout({super.key});
@@ -21,7 +22,7 @@ class ShopLayout extends StatelessWidget {
             actions: [
               IconButton(
                   onPressed: () {
-                    navigateTo(context, const SearchScreen());
+                    navigateTo(context, SearchScreen());
                   },
                   icon: const Icon(
                     Icons.search,
@@ -32,6 +33,14 @@ class ShopLayout extends StatelessWidget {
                 },
                 icon: const Icon(Icons.logout),
               ),
+              // IconButton(
+              //   icon: const Icon(
+              //     Icons.brightness_4_outlined,
+              //   ),
+              //   onPressed: () {
+              //     AppCubit.get(context).changeAppMode();
+              //   },
+              // ),
             ],
           ),
           body: state is ShopLoadingHomeDataState
@@ -40,8 +49,6 @@ class ShopLayout extends StatelessWidget {
                 )
               : cubit.bottomScreens[cubit.currentIndex],
           bottomNavigationBar: BottomNavigationBar(
-              selectedItemColor: Colors.blue,
-              unselectedItemColor: Colors.grey,
               onTap: (index) {
                 cubit.changeBottom(index);
               },
