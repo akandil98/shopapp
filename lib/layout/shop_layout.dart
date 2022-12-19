@@ -34,7 +34,11 @@ class ShopLayout extends StatelessWidget {
               ),
             ],
           ),
-          body: cubit.bottomScreens[cubit.currentIndex],
+          body: state is ShopLoadingHomeDataState
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : cubit.bottomScreens[cubit.currentIndex],
           bottomNavigationBar: BottomNavigationBar(
               selectedItemColor: Colors.blue,
               unselectedItemColor: Colors.grey,
